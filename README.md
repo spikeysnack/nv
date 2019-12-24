@@ -1,9 +1,9 @@
 # nv
-Evaluate numbers from a string on the command line.
---------------------------------------------------------
 
-Python shell utility for numerical processing in bash
------------------------------------------------------
+**Evaluate numbers from a string on the command line.**
+
+**Python shell utility for numerical processing in bash**
+
 
 
 INSTALL:
