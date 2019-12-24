@@ -4,12 +4,17 @@
 
 **Python shell utility for numerical processing in bash**
 
+version: 1.4
+-------
+
+revision date: 22 Dec 2019
+-------------
 
 
 INSTALL:
 --------
 
-   `python nv.py install
+    python nv.py install
 
     or
 
@@ -18,7 +23,6 @@ INSTALL:
     chmod -v 0755 ~/bin/nv.py
 
     ln -s ~/bin/nv.py ~/bin/nv
-`
 
 
 try:
@@ -75,8 +79,10 @@ If so, you are good to go!
                 To see some examples, type "nv help examples".
 
 
+Examples:
+--------
 
-    [cmdline]
+**cmdline**
     
     nv 5 6 7 8 9               nv max  13 45 6 7 8 22 31 41 7
     ==>                        ==>
@@ -100,6 +106,8 @@ If so, you are good to go!
     0.0132275132275               0.707106781187
 
     --------------------------     ----------------------
+
+**shell**
 
     #!/bin/bash
     radius=3
@@ -134,8 +142,16 @@ If so, you are good to go!
      1.20411998266                          4
      1.50514997832                          5
      1.54406804435                          5.12928301694
-`
-    ---------------                         --------------------------------
+     ---------------                        -------------------------------
+
+
+Author:
+-------
+			Chris Reid <spikeysnack@gmail.com>
+
+Copyright:
+----------
+			@2019-2020 free for non-commercial use.
 
 
 
