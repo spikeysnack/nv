@@ -46,37 +46,37 @@ If so, you are good to go!
 
 **usage:**
 
-`nv <key>|expression  arg arg arg ...
-           prog  | nv <keyword>`
+ ```shell nv <key>|expression  arg arg arg ...```
+ 
+ ```prog  | nv <keyword>` if receiving data from a pipe.```
+ 
+    
+nv accepts one keyword and a list of numbers,
+or a string mathematical expression
+similar to
 
-
-    if receiving data from a pipe,
-        nv evaluates numbers created by other programs.
+    ```"2 * pi * sin( sqrt(1/2) )"```
     
-        nv accepts one keyword and a list of numbers,
-        or a string mathematical expression
-        similar to
-             "2 * pi * sin( sqrt(1/2) )"
+    -- note the quotes or the shell will
+       interpret the * as a file glob and
+       the parens as syntax errors.
     
-              -- note the quotes or the shell will
-                  interpret the * as a file glob and
-                 the parens as syntax errors.
+If no keywords are given nv expects a list of numbers and will return the sum
     
-        If no keywords are given nv expects a list of numbers and will return the sum
+nv is designed for shells that do no do floating point by default (sh, bash)
+so they output integers. If you want floating point there are
     
-        nv is designed for shells that do no do floating point by default (sh, bash)
-        so they output integers. If you want floating point there are
+    [fadd, fdiv, favg] which convert all arguments to floats first.
     
-        [fadd, fdiv, favg] which convert all arguments to floats first.
-    
-        preload option:  nv preload  runs python and this script and
+    preload option:      nv preload  runs python and this script and
                          exits so that it is quick to respond upon
                          subsequent calls in the script.
     
     
     
-        note -- To see all available functions, type "nv help functions".
-                To see some examples, type "nv help examples".
+    note -- To see all available functions, type "nv help functions".
+                
+    To see some examples, type "nv help examples".
 
 
 Examples:
