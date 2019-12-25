@@ -1,4 +1,4 @@
-![nv](nv.png)
+![nv](nvlogo.png)
 
 # nv
 
@@ -146,7 +146,6 @@ Examples:
      1.54406804435                          5.12928301694
      ---------------                        -------------------------------
 
-
 Author:
 -------
 			Chris Reid <spikeysnack@gmail.com>
@@ -156,4 +155,4 @@ Copyright:
 			@2019-2020 free for non-commercial use.
 
 
-
+![nv](nv.png)
