@@ -277,6 +277,16 @@ def num(s):
             raise
 
 
+def isclose(f, g, tol=0.00004):
+    """ round if close within tolerance """
+    r6 = round(g, 5)
+    
+    if  fabs(f - r6) < tol:
+        return r6
+    else:
+        return f
+
+
 
 # we do not want arbitrary code executing
 
@@ -285,7 +295,7 @@ def safe_functions():
 
     # make a list of safe function strings
     safe_list = ['bin', 'bool', 'acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh', 'degrees',
-                 'e', 'exp', 'fabs', 'floor', 'fmod', 'frand', 'frexp', 'hex', 'hypot', 'ldexp', 'log',
+                 'e', 'exp', 'exp2', 'expe','fabs', 'fexp', 'floor', 'fmod', 'frand', 'frexp', 'hex', 'hypot', 'ldexp', 'log',
                  'log10', 'modf', 'oct', 'pi', 'pow', 'radians', 'rand', 'sin', 'sinh', 'sqrt', 'tan', 'tanh',
                  'trunc', 'abs', 'int','float', 'max','min', 'round', 'sum', 'range' ]
 
@@ -306,12 +316,13 @@ def safe_functions():
 safe_dict = safe_functions()
 
 
+
 localfuncs = [ "div", "fdiv", "sub", "sort", "rsort", "rev",
-               "avg", "favg", "mult", "fpow", "loge", "sqrt",
-               "log", "log10", "log2",
+               "avg", "favg", "mult", "fpow", "fexp" "loge", "sqrt",
+               "exp", "exp2", "expe", "log", "log10", "log2",
                "range","hex", "bin", "oct",
                "hms", "seconds","timecode", "frames", "area",
-               "md5","sha1","sha25",
+               "md5","sha1","sha25", "pi",
                "rand", "frand",
                "count", "repeat", "runtimes",
                "file read", "file write" ,"file append" ,"file prepend" ]
@@ -322,9 +333,10 @@ localfuncs.sort()
 def funcs_available():
     """ print a list of available math functions
         (see safe_functions above)            """
+    
 
     count = 0
-    for k in safe_dict:
+    for k in sorted(safe_dict.keys() ):
         count +=1
         if safe_dict[k]:
 #            print( k , end=' ')
@@ -336,7 +348,7 @@ def funcs_available():
     printf("\n")
 
     count=0
-    for f in localfuncs:
+    for f in sorted(localfuncs):
         count +=1
         print( "{: >10}".format(f) , end='\t')
         if (count % 8) == 0:
@@ -742,6 +754,30 @@ if __name__ == "__main__":
             p = pow( n, x)
             print(p, end=ss)
 
+    # exponentiation (floating point)
+    elif first == "exp":
+        for x in a:
+            p = int(pow( 10, x) )
+            print(p, end=ss)
+    # exponentiation (floating point)
+    elif first == "fexp":
+        for x in a:
+            p = pow( 10, x)
+            print(p, end=ss)
+
+    # exponentiation (floating point)
+    elif first == "exp2":
+        for x in a:
+            p = int(pow(2, x ))
+            print(p, end=ss)
+
+    # exponentiation (floating point)
+    elif first == "expe":
+        for x in a:
+            p = exp(x)
+            print(p, end=ss)
+
+
     # natural logarithm
     elif first == "loge":
         n = a[0]
@@ -886,6 +922,32 @@ if __name__ == "__main__":
         yl = a[1::2]
         area = [ (x*y) for x,y in zip(xl, yl)]
         print(*area)
+
+    # radians to degrees
+    elif first == "degrees":
+
+        for r in a:
+
+            d = degrees(r)
+
+            d =  isclose( d, round(d,5) , 0.00004)
+                
+            print(d )
+
+    # degrees to radians
+    elif first == "radians":
+        
+        for x in a:
+            print( radians(x) )
+
+    # got pi ?
+    elif first == "pi":
+        print( pi )
+
+    # got tau ?
+    elif first == "tau":
+        print( 2.0 *pi )
+                       
 
     # hash functions
     elif first == "md5":
