@@ -34,8 +34,8 @@ try:
 
 should print out
 
-55
---
+ `55`
+
 
 
 nv test
@@ -57,7 +57,7 @@ nv accepts one keyword and a list of numbers,
 or a string mathematical expression
 similar to
 
-    ```"2 * pi * sin( sqrt(1/2) )"```
+    -- "2 * pi * sin( sqrt(1/2) )"
     
     -- note the quotes or the shell will
        interpret the * as a file glob and

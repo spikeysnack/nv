@@ -379,7 +379,7 @@ def n_eval( l ):
 
     _function = "n_eval" + ": " +  l
 
-    print( (_function))
+    if _debug : print( (_function))
 
     try:
         #restrict eval to safe functions ( no file R/W or code exec )
