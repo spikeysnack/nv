@@ -4,7 +4,9 @@
 
 from __future__ import print_function
 from math import *
+
 import numpy as np
+
 import os, sys, signal, socket, time
 
 if (sys.version_info < (3, 0)):
@@ -68,9 +70,9 @@ __license__     = """Free for all non-commercial purposes.
 
 __maintainer__  = "Chris Reid"
 
-__modification_date__ = "12 Dec 2019"
+__modification_date__ = "31 Dec 2019"
 
-__version__     = "1.4"
+__version__     = "1.5"
 
 __status__      = "working"
 
@@ -295,19 +297,22 @@ def safe_functions():
 
     # make a list of safe function strings
     safe_list = ['bin', 'bool', 'acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh', 'degrees',
-                 'e', 'exp', 'exp2', 'expe','fabs', 'fexp', 'floor', 'fmod', 'frand', 'frexp', 'hex', 'hypot', 'ldexp', 'log',
-                 'log10', 'modf', 'oct', 'pi', 'pow', 'radians', 'rand', 'sin', 'sinh', 'sqrt', 'tan', 'tanh',
+                 'e', 'exp', 'exp2', 'expe','fabs', 'fexp', 'floor', 'fmod', 'frexp', 'hex', 'hypot', 
+                 'ldexp', 'log','log2', 'log10', 'modf', 'oct', 'pi', 'pow', 'radians',  
+                 'sin', 'sinh', 'sqrt', 'tan', 'tanh',
                  'trunc', 'abs', 'int','float', 'max','min', 'round', 'sum', 'range' ]
 
 
     # make a list of safe functions
     safe_funcs = [ bin, bool, acos, asin, atan, atan2, ceil, cos, cosh, degrees,
-                   e,    exp, fabs, floor, fmod, frexp, hex, hypot, ldexp, log,
-                   log10, modf, oct, pi, pow, radians, sin, sinh, sqrt, tan, tanh,
+                   e, exp,  np.exp2, exp, fabs, pow, floor, fmod,  frexp, hex, hypot, 
+                   ldexp, log, log2, log10, modf, oct, pi, pow, radians,  
+                   sin, sinh, sqrt, tan, tanh,
                    trunc, abs, int,float, max, min, round, sum, range ]
 
     # combine them into a dispatch table
     safe_dict =  dict( list(zip(safe_list, safe_funcs)) )
+
 
     return safe_dict
 
@@ -319,7 +324,7 @@ safe_dict = safe_functions()
 
 localfuncs = [ "div", "fdiv", "sub", "sort", "rsort", "rev",
                "avg", "favg", "mult", "fpow", "fexp" "loge", "sqrt",
-               "exp", "exp2", "expe", "log", "log10", "log2",
+               "exp", "exp2", "expe", "log", "log10", "log2", "logn",
                "range","hex", "bin", "oct",
                "hms", "seconds","timecode", "frames", "area",
                "md5","sha1","sha25", "pi",
@@ -360,9 +365,15 @@ def funcs_available():
 def n_eval( l ):
     """ eval math expression -- restricted eval """
     #    l = " ".join(l)
+
+    # print("l = " , l)
+
     try:
         #restrict eval to safe functions ( no file R/W or code exec )
         nres = eval( l , {"__builtins__":None}, safe_dict )
+        
+#        print ( repr(nres) )
+
         return nres
     except:
         return None
@@ -779,14 +790,14 @@ if __name__ == "__main__":
 
 
     # natural logarithm
-    elif first == "loge":
+    elif first in { "log", "loge" }:
         n = a[0]
         for x in a:
             p = log( x )
             print(p, end=ss)
 
     # base 10 logarithm
-    elif first in {"log", "log10"}:
+    elif first  == "log10":
         n = a[0]
         for x in a:
             p = log10( x )
@@ -802,6 +813,20 @@ if __name__ == "__main__":
             if p.is_integer():
                 p = int(p)
             print(p, end=ss)
+
+    # base 2 logarithm
+    elif first == "logn" :
+
+        n = int( a[0] )
+
+        for x in a[1:]:
+                            
+            p = log( x, n  )
+
+            if p.is_integer():
+                p = int(p)
+            print(p, end=ss)
+
 
     # generate a range of integers
     # 1 to n (1 arg)
@@ -948,7 +973,6 @@ if __name__ == "__main__":
     elif first == "tau":
         print( 2.0 *pi )
                        
-
     # hash functions
     elif first == "md5":
         import hashlib
