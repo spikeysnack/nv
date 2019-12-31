@@ -42,14 +42,15 @@ If so, you are good to go!
 """
 
 
-
+# install defaults
 __install_location__ = os.getenv('HOME') + "/bin"
 
 __install_mode__  = 0o0775 # new octal notation
 
 __no_exec_mode__  = 0o664
 
-#-----------------------------------------
+
+# meta info
 __author__      = "Chris Reid"
 
 __category__    = "numeric processing"
@@ -81,6 +82,13 @@ _all__ = [ "safe_functons", "funcs_available", "examples", "n_eval", "num", "pri
 
 
 
+# debug vars
+_debug    = False   # for debugging (not implemented)
+_function = None    #                ''
+_cmdline  = None    #                ''
+
+
+# program functions
 def version():
 
     """ print out some version info """
@@ -246,7 +254,9 @@ def printf(format, *args):
     sys.stdout.write(format % args)
 
 def eprint(*args, **kwargs):
+    """ print to stderr """
     print(*args, file=sys.stderr, **kwargs)
+
 
 
 # try to return a number from a string
@@ -321,7 +331,6 @@ def safe_functions():
 safe_dict = safe_functions()
 
 
-
 localfuncs = [ "div", "fdiv", "sub", "sort", "rsort", "rev",
                "avg", "favg", "mult", "fpow", "fexp" "loge", "sqrt",
                "exp", "exp2", "expe", "log", "log10", "log2", "logn",
@@ -333,6 +342,7 @@ localfuncs = [ "div", "fdiv", "sub", "sort", "rsort", "rev",
                "file read", "file write" ,"file append" ,"file prepend" ]
 
 localfuncs.sort()
+
 
 # what functions can nv perform?
 def funcs_available():
@@ -364,9 +374,12 @@ def funcs_available():
 # take in expressions and evaluate them -- restricted
 def n_eval( l ):
     """ eval math expression -- restricted eval """
-    #    l = " ".join(l)
 
     # print("l = " , l)
+
+    _function = "n_eval" + ": " +  l
+
+    print( (_function))
 
     try:
         #restrict eval to safe functions ( no file R/W or code exec )
@@ -526,6 +539,10 @@ if __name__ == "__main__":
 
     # there is a command to nv
     if len(sys.argv) > 1:
+
+        _cmdline = list(sys.argv) 
+        _function = "__main__"
+
         first = sys.argv[1]
 
         # check for help arg
@@ -536,9 +553,8 @@ if __name__ == "__main__":
                 help()
             exit(0)
 
-        if first == "version":
+        if first in { "-v", "--version" , "version" }:
             version()
-
 
         if first == "install":
             install()
