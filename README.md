@@ -6,10 +6,10 @@
 
 **Python shell utility for numerical processing in bash**
 
-version: 1.4
+version: 1.5
 -------
 
-revision date: 22 Dec 2019
+revision date: 1 Jan 2020
 -------------
 
 
