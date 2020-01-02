@@ -377,17 +377,16 @@ def n_eval( l ):
 
     # print("l = " , l)
 
-    _function = "n_eval" + ": " +  l
+    _function = "n_eval" + ": " +  str(l)
 
     if _debug : print( (_function))
 
     try:
         #restrict eval to safe functions ( no file R/W or code exec )
-        nres = eval( l , {"__builtins__":None}, safe_dict )
-        
-#        print ( repr(nres) )
+        nres = eval( l , {"__builtins__":None}, safe_dict )        
 
         return nres
+
     except:
         return None
 
@@ -635,8 +634,10 @@ if __name__ == "__main__":
             # try evaluation as an expression
             try:
                 res = n_eval(line)
+                    
                 if res:
                     printf("%s\n" , res)
+
             except Exception as e:
                 sys.stderr.write("nv: " + e )
 
@@ -1300,7 +1301,10 @@ if __name__ == "__main__":
     if cmd:
         try:
             res  =  n_eval(cmd)
-            if res:
+
+            if isinstance( res, bool ):  # actual boolean type
+                print(repr(res))
+            elif res:                    # not None
                 printf("%s\n" , res)
 
         except SyntaxError:
