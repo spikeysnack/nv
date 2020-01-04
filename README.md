@@ -74,11 +74,26 @@ so they output integers. If you want floating point there are
                          exits so that it is quick to respond upon
                          subsequent calls in the script.
     
+
+If the first command line option is -n, then stdin will be internally
+redirected from /dev/null, so that it does not consume input. Some
+shell operations such as while read loops need this.
+
+    while IFS= read -r line
+        do
+	    N="$(echo "${line}" | tr -dc '0-9.')
+
+            MiB=$(nv -n "(2**${N}) * 1.04858" )
+
+        done
     
-    
-    note -- To see all available functions, type "nv help functions".
-                
+	
+note    
+====
+    To see all available functions, type "nv help functions".
+               
     To see some examples, type "nv help examples".
+
 
 
 Examples:

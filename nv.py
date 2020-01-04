@@ -564,6 +564,14 @@ if __name__ == "__main__":
         if first == "test":
             test()
 
+       # check if we need to not read stdin for bash loops
+        if first  == "-n" :
+            realstdin = sys.stdin
+            f = open(os.devnull, 'r')
+            sys.stdin = f
+            first = sys.argv[2]
+            sys.argv = sys.argv[2:]
+           # print( "argv ", repr(sys.argv) )
 
 
         # is argv[1] a number
