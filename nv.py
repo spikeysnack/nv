@@ -10,7 +10,7 @@ import os, sys, signal, socket, time
 if (sys.version_info < (3, 0)):
     import thread
 else:
-    import _thread 
+    import _thread
 
 """ nv
 evaluate numbers from a string on the command line.
@@ -39,11 +39,11 @@ If so, you are good to go!
 
 
 # install defaults
-__install_location__ = os.getenv('HOME') + "/bin"
+__install_location__ =  "".join((os.getenv('HOME'), "/bin"))
 
-__install_mode__  = 0o0775 # new octal notation
+__install_mode__  = (0o0775) # new octal notation
 
-__no_exec_mode__  = 0o664
+__no_exec_mode__  = (0o664)
 
 
 # meta info
@@ -74,9 +74,9 @@ __version__     = ("1.6")
 __status__      = ("working")
 
 
-_all__ = ( "num", "n_eval", "printf" , "eprint", "is_close", "check_update", 
-           "help", "version", "test", "examples", "install", "reinstall", 
-           "safe_functons", "funcs_available" ) 
+_all__ = ( "num", "n_eval", "printf" , "eprint", "is_close", "check_update",
+           "help", "version", "test", "examples", "install", "reinstall",
+           "safe_functons", "funcs_available" )
 
 
 
@@ -90,11 +90,11 @@ _cmdline  = None    #                ''
 def version():
 
     """ print out some version info """
-    
+
     vs = ( "nval  version ", __version__ ,  __modification_date__  )
     _version_string = '\t'.join(vs)
 
-    
+
     cc = ( __copyright__ ,  __country__ )
     _copy_country = '\t'.join(cc)
 
@@ -105,7 +105,6 @@ def version():
     ver = '\n'.join(ver)
 
     print( ver )
- 
 
 def printf(format, *args):
     """ ersatz printf function """
@@ -124,16 +123,12 @@ def install():
 
     source  = "nv.py"
 
-
-#    dest    = __install_location__ + "/" + source
-#    destlnk = __install_location__ + "/" + "nv"
-
     dest    = os.path.join( __install_location__, source )
     destlnk = os.path.join( __install_location__, "nv" )
 
 
     if not os.path.exists( dest ):
-#            import subprocess
+
             try:
 
                 with open(source, 'r') as src, open(dest, 'w') as dst: dst.write(src.read())
@@ -147,7 +142,6 @@ def install():
                 if os.path.exists( destlnk):
 
                     print( "nv installed in user bin directory\n")
-                    
 
             except IOError as ioerr:
                 eprint("nv install failure: " , str(ioerr) )
@@ -230,16 +224,16 @@ def check_update():
 
             print(Available)
 
-            input = raw_input("Pull update now  y/n? [n]") or "n"
-            
+            input = raw_input("Merge update now  y/n? [n]") or "n"
+
             if 'y' in input.lower():
-                upcmd = ("git", "pull", "origin")
+                upcmd = ("git", "merge", "origin")
                 update_result =  subprocess.check_output( cmd , universal_newlines=True, stderr=subprocess.STDOUT, shell=False )
                 print(update_result)
 
         else:
-            
-            print("result = " ,  OK )
+
+            print("status = " ,  OK )
 
 
 
@@ -304,7 +298,7 @@ def test():
         fd.write(bash_script)
 
         fd.close()
-        
+
         os.system(cmd)
 
         os.remove(testfile)
@@ -348,7 +342,7 @@ def num(s):
 def isclose(f, g, tol=0.00004):
     """ round if close within tolerance """
     r6 = round(g, 5)
-    
+
     if  fabs(f - r6) < tol:
         return r6
     else:
@@ -435,7 +429,7 @@ def n_eval( l ):
 
     try:
         #restrict eval to safe functions ( no file R/W or code exec )
-        nres = eval( l , {"__builtins__":None}, safe_dict )        
+        nres = eval( l , {"__builtins__":None}, safe_dict )
 
         return nres
 
@@ -586,8 +580,6 @@ if __name__ == "__main__":
     if not sys.stdin.isatty():
         ispipe = True
 
-#    print( "sys.argv:\t"  + repr(sys.argv) + "len\t" + str(len(sys.argv)) )
-
     # there is a command to nv
     if len(sys.argv) > 1:
 
@@ -698,7 +690,7 @@ if __name__ == "__main__":
             # try evaluation as an expression
             try:
                 res = n_eval(line)
-                    
+
                 if res:
                     printf("%s\n" , res)
 
@@ -752,7 +744,7 @@ if __name__ == "__main__":
     elif first in {"load" , "preload", "start", "pass"}:
         pass
 
-    # multiply 
+    # multiply
     elif first == "*" or first == "mul":
         y = 1
         for x in a:
@@ -901,7 +893,6 @@ if __name__ == "__main__":
         n = int( a[0] )
 
         for x in a[1:]:
-                            
             p = log( x, n  )
 
             if p.is_integer():
@@ -1040,12 +1031,10 @@ if __name__ == "__main__":
             d = degrees(r)
 
             d =  isclose( d, round(d,5) , 0.00004)
-                
             print(d )
 
     # degrees to radians
     elif first == "radians":
-        
         for x in a:
             print( radians(x) )
 
@@ -1056,7 +1045,7 @@ if __name__ == "__main__":
     # got tau ?
     elif first == "tau":
         print( 2.0 *pi )
-                       
+
     # hash functions
     elif first == "md5":
         import hashlib
@@ -1259,7 +1248,7 @@ if __name__ == "__main__":
             if os.path.isfile(infile):
                 try:
                     f = open(infile, "r+")
-     
+
                     s = f.read();
 
                     f.seek(0);
