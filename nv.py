@@ -12,7 +12,6 @@ if (sys.version_info < (3, 0)):
 else:
     import _thread 
 
-
 """ nv
 evaluate numbers from a string on the command line.
 
@@ -48,34 +47,36 @@ __no_exec_mode__  = 0o664
 
 
 # meta info
-__author__      = "Chris Reid"
+__author__      = ("Chris Reid")
 
-__category__    = "numeric processing"
+__category__    = ("numeric processing")
 
-__copyright__   = "Copyright: 2018-2020"
+__copyright__   = ("Copyright: 2018-2020")
 
-__country__     = "United States of America"
+__country__     = ("United States of America")
 
-__credits__     = ["Python Software Foundation", "Free Software Foundation" ]
+__credits__     = ("Python Software Foundation", "Free Software Foundation" )
 
-__email__       = "spikeysnack@gmail.com"
+__email__       = ("spikeysnack@gmail.com")
 
-__file__        = ["nval" , "nv"]
+__file__        = ( "nval" , "nv" )
 
-__license__     = """Free for all non-commercial purposes.
-                  Modifications allowed but original attribution must be included.
-                  see (http://creativecommons.org/licenses/by-nc/4.0/)"""
+__license__     = ( """Free for all non-commercial purposes.
+                       Modifications allowed but original attribution must be included.
+                       see (http://creativecommons.org/licenses/by-nc/4.0/) """)
 
-__maintainer__  = "Chris Reid"
+__maintainer__  = ("Chris Reid")
 
-__modification_date__ = "4 Jan 2020"
+__modification_date__ = ("4 Jan 2020")
 
-__version__     = "1.6"
+__version__     = ("1.6")
 
-__status__      = "working"
+__status__      = ("working")
 
 
-_all__ = [ "safe_functons", "funcs_available", "examples", "n_eval", "num", "printf" , "help", "version" ]
+_all__ = ( "num", "n_eval", "printf" , "eprint", "is_close", "check_update", 
+           "help", "version", "test", "examples", "install", "reinstall", 
+           "safe_functons", "funcs_available" ) 
 
 
 
@@ -210,6 +211,46 @@ def reinstall():
             except IOError as ioerr:
                 eprint("nv install failure: " , str(ioerr) )
                 sys.exit(1)
+
+def check_update():
+    """ check if git has newer version """
+    import subprocess
+
+    cmd = ("/usr/bin/git", "fetch" )
+
+    OK  = ("Already up-to-date.")
+    Available = ("Update is avaliable")
+
+    try:
+        result =  subprocess.check_output( cmd , universal_newlines=True, stderr=subprocess.STDOUT, shell=False )
+
+        if result:
+
+            print(result)
+
+            print(Available)
+
+            input = raw_input("Pull update now  y/n? [n]") or "n"
+            
+            if 'y' in input.lower():
+                upcmd = ("git", "pull", "origin")
+                update_result =  subprocess.check_output( cmd , universal_newlines=True, stderr=subprocess.STDOUT, shell=False )
+                print(update_result)
+
+        else:
+            
+            print("result = " ,  OK )
+
+
+
+
+
+    except subprocess.CalledProcessError as cpe:
+
+        eprint( str(cpe) )
+
+
+
 
 
 def test():
@@ -574,6 +615,9 @@ if __name__ == "__main__":
 
         if first == "reinstall":
             reinstall()
+
+        if first == "check_update":
+            check_update()
 
 
        # check if we need to not read stdin for bash loops
