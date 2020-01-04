@@ -6,10 +6,10 @@
 
 **Python shell utility for numerical processing in bash**
 
-version: 1.5
+version: 1.6
 -------
 
-revision date: 1 Jan 2020
+revision date: 5 Jan 2020
 -------------
 
 
@@ -62,7 +62,10 @@ similar to
     -- note the quotes or the shell will
        interpret the * as a file glob and
        the parens as syntax errors.
-    
+
+
+**default**
+
 If no keywords are given nv expects a list of numbers and will return the sum
     
 nv is designed for shells that do no do floating point by default (sh, bash)
@@ -75,24 +78,29 @@ so they output integers. If you want floating point there are
                          subsequent calls in the script.
     
 
-If the first command line option is -n, then stdin will be internally
-redirected from /dev/null, so that it does not consume input. Some
-shell operations such as while read loops need this.
+**disable piped input**
+
+If the first command line option is **-n**, then */dev/stdin* will be internally
+redirected from */dev/null*, so that it does not consume input. Some
+shell operations such as while read loops need this, or the program
+will exhaust /dev/stdin and the loop will terminate after the first iteration.
 
     while IFS= read -r line
         do
-	    N="$(echo "${line}" | tr -dc '0-9.')
+	        # only want digits and . 
+            N="$(echo "${line}" | tr -dc '0-9.')
 
+	        # convert to MiB
             MiB=$(nv -n "(2**${N}) * 1.04858" )
-
         done
-    
-	
-note    
+
+
+Note    
 ====
     To see all available functions, type "nv help functions".
                
     To see some examples, type "nv help examples".
+
 
 
 

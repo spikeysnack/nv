@@ -5,8 +5,6 @@
 from __future__ import print_function
 from math import *
 
-import numpy as np
-
 import os, sys, signal, socket, time
 
 if (sys.version_info < (3, 0)):
@@ -26,7 +24,6 @@ INSTALL:
     ln -s ~/bin/nv.py ~/bin/nv
 
 try
-
 
 
  nv 1 2 3 4 5 6 7 8 9 10
@@ -71,9 +68,9 @@ __license__     = """Free for all non-commercial purposes.
 
 __maintainer__  = "Chris Reid"
 
-__modification_date__ = "31 Dec 2019"
+__modification_date__ = "4 Jan 2020"
 
-__version__     = "1.5"
+__version__     = "1.6"
 
 __status__      = "working"
 
@@ -92,41 +89,67 @@ _cmdline  = None    #                ''
 def version():
 
     """ print out some version info """
-    _version_string = "nval  version " + __version__ + "\t\t" + __modification_date__ + " "
+    
+    vs = ( "nval  version ", __version__ ,  __modification_date__  )
+    _version_string = '\t'.join(vs)
 
-    _copy_country = __copyright__ + "\t\t" +  __country__
+    
+    cc = ( __copyright__ ,  __country__ )
+    _copy_country = '\t'.join(cc)
 
-    _auth_string = "Author: " + __maintainer__ + "\t\temail: "  + __email__
+    astr = ( "Author:", __maintainer__ , "email:",  __email__ )
+    _auth_string = '\t'.join(astr)
 
-    print( _version_string)
-    print( _copy_country  )
-    print( _auth_string   )
+    ver = ( _version_string, _copy_country, _auth_string )
+    ver = '\n'.join(ver)
 
+    print( ver )
+ 
+
+def printf(format, *args):
+    """ ersatz printf function """
+    sys.stdout.write(format % args)
+
+def eprint(*args, **kwargs):
+    """ print to stderr """
+    print(*args, file=sys.stderr, **kwargs)
 
 
 def install():
     """ install in users path """
     from os.path import expanduser
+
+    import py_compile
+
     source  = "nv.py"
-    dest    = __install_location__ + "/" + source
-    destlnk = __install_location__ + "/" + "nv"
+
+
+#    dest    = __install_location__ + "/" + source
+#    destlnk = __install_location__ + "/" + "nv"
+
+    dest    = os.path.join( __install_location__, source )
+    destlnk = os.path.join( __install_location__, "nv" )
+
 
     if not os.path.exists( dest ):
 #            import subprocess
             try:
+
                 with open(source, 'r') as src, open(dest, 'w') as dst: dst.write(src.read())
 
                 os.chmod(dest, __install_mode__ )
+
+                py_compile.compile(dest)
 
                 os.symlink(dest , destlnk )
 
                 if os.path.exists( destlnk):
 
                     print( "nv installed in user bin directory\n")
-
+                    
 
             except IOError as ioerr:
-                eprint("nv install failure: " + str(ioerr) )
+                eprint("nv install failure: " , str(ioerr) )
                 sys.exit(1)
 
     else:
@@ -138,10 +161,15 @@ def reinstall():
 
     from os.path import expanduser
 
+    import py_compile
+
     source  = "nv.py"
-    oldname = __install_location__ + "/" + source + ".old"
-    dest    = __install_location__ + "/" + source
-    destlnk = __install_location__ + "/" + "nv"
+
+    old     = "".join ( (source ,".old" ) )
+
+    oldname  = os.path.join( __install_location__, old  )
+    dest     = os.path.join( __install_location__, source )
+    destlnk  = os.path.join( __install_location__, "nv" )
 
 
     if not os.path.exists( dest ):
@@ -149,7 +177,6 @@ def reinstall():
        return
 
     else:
-
             try:
 
                 from filecmp  import cmp
@@ -160,8 +187,6 @@ def reinstall():
                 else:
                     print("updating file")
 
-
-
                 if os.path.islink(destlnk):
                     os.unlink(destlnk)
 
@@ -171,8 +196,9 @@ def reinstall():
 
                 with open(source, 'r') as src, open(dest, 'w') as dst: dst.write(src.read())
 
-
                 os.chmod(dest, __install_mode__ )
+
+                py_compile.compile(dest)
 
                 os.symlink(dest , destlnk )
 
@@ -181,12 +207,9 @@ def reinstall():
                     print( "nv reinstalled in user bin directory\n")
 
 
-
             except IOError as ioerr:
-                eprint("nv install failure: " + str(ioerr) )
+                eprint("nv install failure: " , str(ioerr) )
                 sys.exit(1)
-
-
 
 
 def test():
@@ -231,6 +254,8 @@ def test():
     '''
     print(bash_script)
 
+    cmd = " ".join ( ("/bin/bash", testfile) )
+
     try:
 
         fd = open(testfile , "w")
@@ -238,24 +263,14 @@ def test():
         fd.write(bash_script)
 
         fd.close()
-
-        os.system("/bin/bash" + " " + testfile )
+        
+        os.system(cmd)
 
         os.remove(testfile)
 
     except IOError as ioerr:
         sys.stderr.write("test failed to execute:\t " + ioerr)
 
-
-
-
-def printf(format, *args):
-    """ ersatz printf function """
-    sys.stdout.write(format % args)
-
-def eprint(*args, **kwargs):
-    """ print to stderr """
-    print(*args, file=sys.stderr, **kwargs)
 
 
 
@@ -305,20 +320,22 @@ def isclose(f, g, tol=0.00004):
 def safe_functions():
     """ allow only these functions in eval """
 
-    # make a list of safe function strings
-    safe_list = ['bin', 'bool', 'acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh', 'degrees',
-                 'e', 'exp', 'exp2', 'expe','fabs', 'fexp', 'floor', 'fmod', 'frexp', 'hex', 'hypot', 
+
+    # make a tuple of safe function strings
+    safe_list = ('bin', 'bool', 'acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh', 'degrees',
+                 'e', 'exp', 'fabs', 'fexp', 'floor', 'fmod', 'frexp', 'hex', 'hypot', 
                  'ldexp', 'log','log2', 'log10', 'modf', 'oct', 'pi', 'pow', 'radians',  
                  'sin', 'sinh', 'sqrt', 'tan', 'tanh',
-                 'trunc', 'abs', 'int','float', 'max','min', 'round', 'sum', 'range' ]
+                 'trunc', 'abs', 'int','float', 'max','min', 'round', 'sum', 'range' )
 
-
-    # make a list of safe functions
-    safe_funcs = [ bin, bool, acos, asin, atan, atan2, ceil, cos, cosh, degrees,
-                   e, exp,  np.exp2, exp, fabs, pow, floor, fmod,  frexp, hex, hypot, 
+    # make a tuple of safe functions
+    safe_funcs = ( bin, bool, acos, asin, atan, atan2, ceil, cos, cosh, degrees,
+                   e, exp, fabs, pow, floor, fmod,  frexp, hex, hypot, 
                    ldexp, log, log2, log10, modf, oct, pi, pow, radians,  
                    sin, sinh, sqrt, tan, tanh,
-                   trunc, abs, int,float, max, min, round, sum, range ]
+                   trunc, abs, int,float, max, min, round, sum, range )
+
+ 
 
     # combine them into a dispatch table
     safe_dict =  dict( list(zip(safe_list, safe_funcs)) )
@@ -330,18 +347,12 @@ def safe_functions():
 #yes this is global
 safe_dict = safe_functions()
 
-
-localfuncs = [ "div", "fdiv", "sub", "sort", "rsort", "rev",
-               "avg", "favg", "mult", "fpow", "fexp" "loge", "sqrt",
-               "exp", "exp2", "expe", "log", "log10", "log2", "logn",
-               "range","hex", "bin", "oct",
-               "hms", "seconds","timecode", "frames", "area",
-               "md5","sha1","sha25", "pi",
-               "rand", "frand",
-               "count", "repeat", "runtimes",
-               "file read", "file write" ,"file append" ,"file prepend" ]
-
-localfuncs.sort()
+# tuple of local functions
+localfuncs = ('area', 'avg', 'count', 'div', 'exp2', 'expe', 
+              'favg', 'fdiv', 'fexploge', 'file append', 'file prepend', 'file read', 'file write', 
+              'fpow', 'frames', 'frand', 'hms', 
+              'logn', 'md5', 'mult', 'rand', 'repeat', 'rev', 'rsort', 
+              'runtimes', 'seconds', 'sha1', 'sha25', 'sort', 'sub', 'timecode')
 
 
 # what functions can nv perform?
@@ -555,14 +566,15 @@ if __name__ == "__main__":
         if first in { "-v", "--version" , "version" }:
             version()
 
+        if first in { "-t", "--test", "test" }:
+            test()
+
         if first == "install":
             install()
 
         if first == "reinstall":
             reinstall()
 
-        if first == "test":
-            test()
 
        # check if we need to not read stdin for bash loops
         if first  == "-n" :
@@ -927,9 +939,12 @@ if __name__ == "__main__":
 
             frames = int( round( remainder / one_frame + 0.08)  )
 
-#            sys.stderr.write("[frames]: remainder: " + str(remainder)  + " frames: " +  str(frames) + "\n\n" )
+            H = str(h).zfill(2)
+            M = str(m).zfill(2)
+            S = str(s).zfill(2)
+            F = str(frames).zfill(2)
 
-            out = "" + str(h).zfill(2) + ":" + str(m).zfill(2) + ":" + str(s).zfill(2) + ":" + str(frames).zfill(2)
+            out = ":".join( H, M, S, F ) 
 
             print(out, end=ss)
 
@@ -1179,7 +1194,7 @@ if __name__ == "__main__":
 
         elif a[0] == "append":
             f=  a[1]
-            str = ' '.join(a[2:])
+            str = ' '.join( a[2:] )
             str+= '\n'
 
             if os.path.isfile(f):
@@ -1200,9 +1215,15 @@ if __name__ == "__main__":
             if os.path.isfile(infile):
                 try:
                     f = open(infile, "r+")
+     
                     s = f.read();
+
                     f.seek(0);
-                    f.write(str + s + '\n' )
+
+                    full = "".join (( str, s, "\n"))
+
+                    f.write(full )
+
                     f.close()
 
                 except IOError as e:
@@ -1221,7 +1242,7 @@ if __name__ == "__main__":
         n = min( n, 1000)
 
         if len(a) == 1:
-            eprint( ("usage: nv repeat " + str(n) + " \"command arg1 arg2 ..\" \n") )
+            eprint( ("usage: nv repeat ", str(n) , " \"command arg1 arg2 ..\" \n") )
             sys.exit(1)
 
         f  = a[1]
