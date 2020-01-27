@@ -437,6 +437,104 @@ def n_eval( l ):
         return None
 
 
+# string compare
+def str_compare( a ):
+
+    """ compare two strings
+    "dog < cat"   ==> False
+    "dog <= cat"  ==> False
+    "dog == cat"  ==> False
+    "dog > cat"   ==> True
+    "dog >= cat"  ==> True
+
+     bash example:
+   
+           var=$( ${NV} "${var1} == ${var2}")
+     
+           if ["${var}" == "True" ] ; then
+              echo "equal"
+          fi
+
+    '<=>'  returns '1', '0', '-1' for >, ==, <, 
+    '><'   True if x is in y 
+    '<>'   True if y is in x 
+    '@'  letters common to both strings
+    '#'  letters uncommon to both strings
+    '~'  unique set of letters of both strings
+
+    """
+
+    for op in ( '<=>', '><', '<>', '!=', '==' , '<=', '>=', '>', '<', '@', '#', '~'  ):
+        
+        if op in a[0]:
+
+            l = a[0].split(' ')
+
+#            eprint("DEBUG l: " , l)
+
+            if len(l) == 3:
+
+                x = l[0]
+                o = l[1]
+                y = l[2]
+
+                if op == '><':
+                    return  (x in y)
+
+                if op == '<>':
+                    return  (y in x)
+
+                if op == '!=':
+                    return  (x != y)
+                    
+                if op == '<=>':
+                    if x == y: 
+                        return "0"
+                    elif x > y:
+                        return "1"
+                    else:
+                        return "-1"
+
+                if op == '==': return  x == y
+
+                if op == '<=': return  x <= y
+
+                if op == '>=': return  x >= y 
+
+                if op == '<':  return  x <  y
+
+                if op == '>':  return  x >  y
+
+                # letters common to both strings
+                if op == "@":
+                    q = set()
+                    for letter in y:
+                        if letter in x:
+                            q.add(letter)
+                    return ''.join((q))
+                # letters not common to both strings
+                if op == "#":
+                    q = set()
+                    for letter in x:
+                        if letter not in y:
+                            q.add(letter)
+                    return ''.join((q))
+
+                # unique set of all letters in both strings
+                if op == '~':  
+                    q = set()
+                    for letter in x:
+                        q.add(letter)
+                    for letter in y:
+                        q.add(letter)
+                    return ''.join((q))
+                        
+    # unknown
+    return ""
+
+
+
+
 # help message
 def help( s="" ):
     """ print out a usage message """
@@ -824,6 +922,18 @@ if __name__ == "__main__":
         favg = sum(b) / float(len(b))
         print(favg, end=ss)
 
+    # square root
+    elif first == "sqrt":
+        r = []
+
+        for n in a:
+            x = sqrt(n)
+            r.append(x)
+
+        for x in r:
+            print(x, end=' ')
+
+
     # exponentiation (integer)
     elif first == "pow":
         n = a[0]
@@ -1184,15 +1294,6 @@ if __name__ == "__main__":
                     cnt -= 1
 
 
-    elif first == "sqrt":
-        r = []
-
-        for n in a:
-            x = sqrt(n)
-            r.append(x)
-
-        for x in r:
-            print(x, end=' ')
 
 
 # file is a multi arg command
@@ -1348,8 +1449,11 @@ if __name__ == "__main__":
 
     #elif PUT YOUR KEYWORD HERE
 
+    elif first in ( "comp", "compare", "cond"):
+        x = str_compare(a)
+        print(x)
 
-
+        
     ######################################################
 
     else: # default no command -- use expression see below
