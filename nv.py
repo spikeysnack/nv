@@ -1009,6 +1009,41 @@ if __name__ == "__main__":
                 p = int(p)
             print(p, end=ss)
 
+    # factorial
+    elif first in {"fact", "factorial"} :
+
+        for x in a:
+
+            if isinstance(x , float):
+                x = int(round(x))
+
+            if x > 10000:
+                eprint( str(x) + " is too large and would take too long\n" )
+                continue
+
+            p = factorial(x)
+
+            print(p, end=ss)
+
+    # factorial
+    elif first in {"series", "seriessum"} :
+
+        for x in a:
+
+            B = [0]
+            n = 0
+        
+            if isinstance(x , float):
+                x = int(round(x))
+    
+            for p in range(0,x+1):
+                B.append(B[-1] + p)
+
+            for s in B:  n +=s
+            
+            print(s, end=ss)
+
+
 
     # generate a range of integers
     # 1 to n (1 arg)
