@@ -23,7 +23,7 @@ srcdir = src
 INSTALL = $(shell which install)
 INSTALL_PROGRAM = $(INSTALL)
 
-NV.PY := $(bindir)/nv.py
+NV.PY = $(bindir)/nv.py
 
 #.PHONY: all  install install-bin install-man install-doc uninstall test
 
@@ -32,7 +32,7 @@ NV.PY := $(bindir)/nv.py
 all:	install nv.py
 
 #install:	install-bin  install-man install-doc
-install:	$(bindir)/nv.py	install-bin 
+install:	install-bin  
 	$(PY) -m compileall $(bindir)/nv.py
 #	$(MAKE) test
 
@@ -49,7 +49,7 @@ install-doc:	nv.py
 	$(INSTALL_PROGRAM) -d -g users --mode=0755 $(docdir)
 	cp -a doc/* $(docdir)
 
-reinstall:|	$(NV.PY)
+reinstall:	$(NV.PY)	
 	mv $(bindir)/nv.py  $(bindir)/nv.py.old
 	$(MAKE) update
 	$(MAKE) install
