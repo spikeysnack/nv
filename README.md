@@ -9,7 +9,7 @@
 version: 1.6
 -------
 
-revision date: 5 Jan 2020
+revision date: 18 Mar 2020
 -------------
 
 Master URL: <https://github.com/spikeysnack/nv>
