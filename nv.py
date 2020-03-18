@@ -69,7 +69,7 @@ __maintainer__  = ("Chris Reid")
 
 __modification_date__ = ("4 Jan 2020")
 
-__version__     = ("1.6")
+__version__     = ("1.7")
 
 __status__      = ("working")
 
@@ -236,15 +236,9 @@ def check_update():
             print("status = " ,  OK )
 
 
-
-
-
     except subprocess.CalledProcessError as cpe:
 
         eprint( str(cpe) )
-
-
-
 
 
 def test():
@@ -359,7 +353,7 @@ def safe_functions():
     # make a tuple of safe function strings
     safe_list = ('bin', 'bool', 'acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh', 'degrees',
                  'e', 'exp', 'fabs', 'fexp', 'floor', 'fmod', 'frexp', 'hex', 'hypot', 
-                 'ldexp', 'log','log2', 'log10', 'modf', 'oct', 'pi', 'pow', 'radians',  
+                 'ldexp', 'log','log2', 'log10', 'modf', 'oct', 'pi', 'pow', 'xpow', 'radians',  
                  'sin', 'sinh', 'sqrt', 'tan', 'tanh',
                  'trunc', 'abs', 'int','float', 'max','min', 'round', 'sum', 'range' )
 
@@ -385,7 +379,7 @@ safe_dict = safe_functions()
 # tuple of local functions
 localfuncs = ('area', 'avg', 'count', 'div', 'exp2', 'expe', 
               'favg', 'fdiv', 'fexploge', 'file append', 'file prepend', 'file read', 'file write', 
-              'fpow', 'frames', 'frand', 'hms', 
+              'fpow', 'xpow', 'frames', 'frand', 'hms', 
               'logn', 'md5', 'mult', 'rand', 'repeat', 'rev', 'rsort', 
               'runtimes', 'seconds', 'sha1', 'sha25', 'sort', 'sub', 'timecode')
 
@@ -939,6 +933,13 @@ if __name__ == "__main__":
         n = a[0]
         for x in a[1:]:
             p = pow( n, x)
+            print(int(p), end=ss)
+
+    # exponentiation (integer) x^n
+    elif first == "xpow":
+        n = a[0]
+        for x in a[1:]:
+            p = pow(x, n)
             print(int(p), end=ss)
 
     # exponentiation (floating point)

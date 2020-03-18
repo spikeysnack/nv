@@ -58,6 +58,7 @@ reinstall:|	$(NV.PY)
 test:	| $(install)
 	@nv test
 
+
 update:
 	@{ GF=$(shell git fetch origin 2>&1); \
 	   if [[ "$${GF}" ]]  ; then git merge origin ; \
