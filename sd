@@ -1,0 +1,10 @@
+#!/bin/bash
+
+x=$(nv  13 - 5)
+
+y=$(nv 6 pow 7)
+
+D=$(nv  $x \* $y)
+
+echo "$x  $y  $D"
+
