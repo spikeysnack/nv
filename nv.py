@@ -67,9 +67,9 @@ __license__     = ( """Free for all non-commercial purposes.
 
 __maintainer__  = ("Chris Reid")
 
-__modification_date__ = ("4 Jan 2020")
+__modification_date__ = ("30 oct 2020")
 
-__version__     = ("1.7")
+__version__     = ("1.8")
 
 __status__      = ("working")
 
@@ -665,6 +665,7 @@ if __name__ == "__main__":
     n = []
 
     first  = None
+    second = None
     ispipe = False
     cmd    = None
     index  = 0
@@ -702,8 +703,8 @@ if __name__ == "__main__":
 
         if first == "check_update":
             check_update()
-
-
+                
+            
        # check if we need to not read stdin for bash loops
         if first  == "-n" :
             realstdin = sys.stdin
@@ -807,8 +808,27 @@ if __name__ == "__main__":
 
 
     # default
-    if not first: first = "add"
+    if not first:
+#        print ("a", a)
+        if len(sys.argv) > 2:
+            second = sys.argv[2]
+            if second in [ "+", "plus" , "add" ]   : first = "add"
+                
+            if second in [ "-", "minus", "sub" ]   : first = "sub"
 
+            if second in [ "/", "div", "divide" ]  : first = "div"
+
+            if second in [ "*", "mul", "mult", "times" ]   : first = "mul"
+
+            if second in [ "to", "range" ]   : first = "range"
+
+            if second  == "pow"  : first = "pow"
+
+            a.remove(second)  #  remove the operator
+        else:
+            first = "add"
+            
+        
     # function selection
     if first == "add" or first == "+":
         print( sum(i for i in a), end = ss )
