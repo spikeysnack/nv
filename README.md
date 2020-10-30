@@ -41,6 +41,25 @@ should print out
 
 
 
+ `nv 15 / 2`
+ 
+ `7.5`
+
+ `nv 13  pow 3`
+ 
+ `2197`
+
+
+
+ `pi=$(nv pi)`
+ `r=2`
+ `area=$(nv "${pi} * r**2")`
+ `echo "area of circle radius ${r}   ${area}"`
+
+ `12.566370614359172` 
+
+
+
 nv test
 -------
 
