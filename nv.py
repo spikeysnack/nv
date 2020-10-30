@@ -351,7 +351,7 @@ def safe_functions():
 
 
     # make a tuple of safe function strings
-    safe_list = ('bin', 'bool', 'acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh', 'degrees',
+    safe_list = ('bin', 'bool', 'acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh', 'dec', 'degrees',
                  'e', 'exp', 'fabs', 'fexp', 'floor', 'fmod', 'frexp', 'hex', 'hypot', 
                  'ldexp', 'log','log2', 'log10', 'modf', 'oct', 'pi', 'pow', 'xpow', 'radians',  
                  'sin', 'sinh', 'sqrt', 'tan', 'tanh',
@@ -1087,6 +1087,13 @@ if __name__ == "__main__":
                     print( i )
 
     # convert base10 to hexadecimal
+    elif first == "dec":
+        for x in a:
+            if int(x):
+                s = '{0:d}'.format(x)
+                print(s, end=ss)
+
+
     elif first == "hex":
         for x in a:
             if int(x):
