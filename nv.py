@@ -1524,17 +1524,22 @@ if __name__ == "__main__":
 
         if not first:
             cmd = " ".join(sys.argv[1:])
+#            print( ("cmd:  " + cmd) )
         else:
             cmd = first
-
+#            print( ("cmd:  " + cmd) )
+            args =  sys.argv
+            
+            
     if cmd:
         try:
-            res  =  n_eval(cmd)
+            for cmd in args:
+                res  =  n_eval(cmd)
 
-            if isinstance( res, bool ):  # actual boolean type
-                print(repr(res))
-            elif res:                    # not None
-                printf("%s\n" , res)
+                if isinstance( res, bool ):  # actual boolean type
+                    print(repr(res))
+                elif res:                    # not None
+                    printf("%s\n" , res)
 
         except SyntaxError:
             sys.stderr.write("nv: syntax error: " + cmd )
