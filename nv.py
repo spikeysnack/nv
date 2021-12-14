@@ -86,6 +86,11 @@ _function = None    #                ''
 _cmdline  = None    #                ''
 
 
+# constants
+#pi =  3.1415926
+#tau = 6.2821852
+
+
 # program functions
 def version():
 
@@ -419,7 +424,7 @@ def n_eval( l ):
 
     _function = "n_eval" + ": " +  str(l)
 
-    if _debug : print( (_function))
+#    if _debug : print( (_function))
 
     try:
         #restrict eval to safe functions ( no file R/W or code exec )
@@ -427,7 +432,8 @@ def n_eval( l ):
 
         return nres
 
-    except:
+    except Exception as e:
+        if _debug: print ("n_eval: ", e)
         return None
 
 
@@ -899,6 +905,16 @@ if __name__ == "__main__":
         for r in a:
             print( int(round(r)), end=ss )
 
+    # round to integer
+    elif first == "floor":
+        for r in a:
+            print( floor(r), end=ss )
+
+    # round to integer
+    elif first == "ceil":
+        for r in a:
+            print( ceil(r), end=ss )
+            
     # subtract args
     elif first == "sub":
         if len(a) >1:
