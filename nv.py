@@ -51,7 +51,7 @@ __author__      = ("Chris Reid")
 
 __category__    = ("numeric processing")
 
-__copyright__   = ("Copyright: 2018-2020")
+__copyright__   = ("Copyright: 2018-2023")
 
 __country__     = ("United States of America")
 
@@ -67,9 +67,9 @@ __license__     = ( """Free for all non-commercial purposes.
 
 __maintainer__  = ("Chris Reid")
 
-__modification_date__ = ("30 oct 2020")
+__modification_date__ = ("01 Jan 2023")
 
-__version__     = ("1.8")
+__version__     = ("1.9")
 
 __status__      = ("working")
 
@@ -125,6 +125,8 @@ def install():
     from os.path import expanduser
 
     import py_compile
+    
+    import subprocess
 
     source  = "nv.py"
 
@@ -153,9 +155,23 @@ def install():
                 sys.exit(1)
 
     else:
-        eprint("nv already installed")
 
+        cmd = ("nv", "version" )
+        
+        try:
+            result =  subprocess.check_output( cmd , universal_newlines=True, stderr=subprocess.STDOUT, shell=False )
 
+            line1 = result.partition('\n')[0]
+
+            if __version__ in line1:
+                eprint("nv is already installed and the current version.")
+            else:
+                reinstall()
+
+        except IOError as ioerr:
+            eprint("nv install failure: " , str(ioerr) )
+            sys.exit(1)
+        
 def reinstall():
     """ reinstall in users path """
 
@@ -211,6 +227,7 @@ def reinstall():
                 eprint("nv install failure: " , str(ioerr) )
                 sys.exit(1)
 
+                
 def check_update():
     """ check if git has newer version """
     import subprocess
@@ -487,31 +504,38 @@ def str_compare( a ):
     '~'  unique set of letters of both strings
 
     """
-
-    for op in ( '<=>', '><', '<>', '!=', '==' , '<=', '>=', '>', '<', '@', '#', '~'  ):
+ #   eprint("DEBUG a: " , a)
+        
+    for op in ( ' <=> ', ' >< ', ' <> ', ' != ', ' == ' , ' <= ', ' >= ', ' > ', ' < ', ' @ ' , ' # ', ' ~ '  ):
         
         if op in a[0]:
 
-            l = a[0].split(' ')
+            l = a[0].split(op)
+
+            l = [i for i in l if i ] # remove empty strings in list
+            #l.remove(op)
 
 #            eprint("DEBUG l: " , l)
 
-            if len(l) == 3:
+            
+            if len(l) == 2:
 
                 x = l[0]
-                o = l[1]
-                y = l[2]
-
-                if op == '><':
+#                o = l[1]
+                y = l[1]
+#                eprint("DEBUG x: " , x)
+#                eprint("DEBUG y: " , y)
+                
+                if op == ' >< ':
                     return  (x in y)
 
-                if op == '<>':
+                if op == ' <> ':
                     return  (y in x)
 
-                if op == '!=':
+                if op == ' != ':
                     return  (x != y)
                     
-                if op == '<=>':
+                if op == ' <=> ':
                     if x == y: 
                         return "0"
                     elif x > y:
@@ -519,25 +543,25 @@ def str_compare( a ):
                     else:
                         return "-1"
 
-                if op == '==': return  x == y
+                if op == ' == ': return  x == y
 
-                if op == '<=': return  x <= y
+                if op == ' <= ': return  x <= y
 
-                if op == '>=': return  x >= y 
+                if op == ' >= ': return  x >= y 
 
-                if op == '<':  return  x <  y
+                if op == ' < ':  return  x <  y
 
-                if op == '>':  return  x >  y
+                if op == ' > ':  return  x >  y
 
                 # letters common to both strings
-                if op == "@":
+                if op == ' @ ':
                     q = set()
                     for letter in y:
                         if letter in x:
                             q.add(letter)
                     return ''.join((q))
                 # letters not common to both strings
-                if op == "#":
+                if op == ' # ':
                     q = set()
                     for letter in x:
                         if letter not in y:
@@ -545,7 +569,7 @@ def str_compare( a ):
                     return ''.join((q))
 
                 # unique set of all letters in both strings
-                if op == '~':  
+                if op == ' ~ ':  
                     q = set()
                     for letter in x:
                         q.add(letter)
@@ -860,7 +884,7 @@ if __name__ == "__main__":
             if second in [ "to", "range" ]:
                 first = "range"
                 op = True
-            if second  == "pow":
+            if second in [ "pow" , "^" ]:
                 first = "pow"
                 op = True
 
@@ -1298,9 +1322,9 @@ if __name__ == "__main__":
         """ return count of a string in a list"""
 
         x = str( a[0] )
-        f = a[1]
+        f = a[1] if len(a)>1 else None
 
-        if os.path.isfile( f ):
+        if f and os.path.isfile( f ):
 
             lines = []
             words = []
@@ -1330,7 +1354,7 @@ if __name__ == "__main__":
 
         else:
             y = a[1:]
-
+#            eprint("y" , y)
             z = [a for b in y for a in b.split() ]
 
             print ( z.count(x) )
