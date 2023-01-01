@@ -4,7 +4,9 @@
 
 echo "test nv"
 
-NV=$(which nv)
+#NV=$(which nv)
+
+NV=
 
 [[ ! ${NV} ]] && NV="./nv"
 
@@ -30,22 +32,26 @@ echo "${prsq}"
 echo
 
 echo "nv 5 6 7 8 9"
-nv 5 6 7 8 9
+${NV} 5 6 7 8 9
 
 echo "nv max  13 45 6 7 8 22 31 41 7"
-nv max  13 45 6 7 8 22 31 41 7
+${NV} max  13 45 6 7 8 22 31 41 7
 echo  
 
 echo "nv pow 11 12"
-nv pow 11 12 
+${NV} pow 11 12 
 echo  
 
 echo "nv \"sin(pi/4) * 4\""
-nv "sin(pi/4) * 4"
+${NV} "sin(pi/4) * 4"
 echo  
 
+
 echo "nv runtimes 10 \"echo this line repeats 10 times.\""
-nv runtimes 10 "echo This line repeats 10 times"
+
+${NV} runtimes 10 "echo This line repeats 10 times"
+
+
 
 echo "============================"
 read -p "Press enter to continue"
@@ -56,21 +62,23 @@ mult=$(echo "1 2 3 4 5 6 7 8 9 10" | ${NV} mul)
 echo "${mult}"
 echo  
 
+
+
 echo "\"2 4 8 16 32 35\" | nv log10"
-echo "2 4 8 16 32 35" | nv log10
+echo "2 4 8 16 32 35" | ${NV} log10
 echo  
 
 echo "\"2 4 8 16 32 35\" | nv log2"
-echo "2 4 8 16 32 35" | nv log2
+echo "2 4 8 16 32 35" | ${NV} log2
 echo  
 
 
 echo "\"5 7 9 2 3\" | nv fdiv"
-echo "5 7 9 2 3" | nv fdiv
+echo "5 7 9 2 3" | ${NV} fdiv
 echo  
 
 echo "\"sin(pi/4\)\" | nv"
-echo "sin(pi/4)" | nv
+echo "sin(pi/4)" | ${NV}
 echo  
 
 echo "============================"

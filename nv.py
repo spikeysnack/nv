@@ -306,6 +306,20 @@ def test():
         sys.stderr.write("test failed to execute:\t " + ioerr)
 
 
+def is_num(i):
+    """ is i  a number """
+    try:
+        # is float
+        i = float(first)
+    except ValueError:
+        try:
+            #is int
+            i = int(first)
+        except ValueError:
+            return False
+        
+    return True
+
 
 
 # try to return a number from a string
@@ -337,7 +351,13 @@ def num(s):
         except ValueError:  # not an int or float -- (what?)
             raise
 
+def is_num(n):
+    """ is i a number """
+    if   type(n) == int : return True
+    elif type(n) == float: return True
+    else: return False
 
+    
 def isclose(f, g, tol=0.00004):
     """ round if close within tolerance """
     r6 = round(g, 5)
@@ -420,8 +440,12 @@ def funcs_available():
 def n_eval( l ):
     """ eval math expression -- restricted eval """
 
-    # print("l = " , l)
-
+#    print("l = " , l)
+    
+    if "pi" in l:    
+        l = l.replace('pi' , '3.1415926')
+ #       print("l:" , l)
+        
     _function = "n_eval" + ": " +  str(l)
 
 #    if _debug : print( (_function))
@@ -815,24 +839,33 @@ if __name__ == "__main__":
 
     # default
     if not first:
+        first = "add"
 #        print ("a", a)
         if len(sys.argv) > 2:
             second = sys.argv[2]
-            if second in [ "+", "plus" , "add" ]   : first = "add"
+            op = False
                 
-            if second in [ "-", "minus", "sub" ]   : first = "sub"
+            if second in [ "+", "plus" , "add" ]:
+                first = "add"
+                op = True
+            if second in [ "-", "minus", "sub" ]:
+                first = "sub"
+                op = True
+            if second in [ "/", "div", "divide" ]:
+                first = "div"
+                op = True
+            if second in [ "*", "mul", "mult", "times" ]:
+                first = "mul"
+                op = True
+            if second in [ "to", "range" ]:
+                first = "range"
+                op = True
+            if second  == "pow":
+                first = "pow"
+                op = True
 
-            if second in [ "/", "div", "divide" ]  : first = "div"
-
-            if second in [ "*", "mul", "mult", "times" ]   : first = "mul"
-
-            if second in [ "to", "range" ]   : first = "range"
-
-            if second  == "pow"  : first = "pow"
-
-            a.remove(second)  #  remove the operator
-        else:
-            first = "add"
+            if op:
+                a.remove(second)  #  remove the operator
             
         
     # function selection
@@ -1471,9 +1504,10 @@ if __name__ == "__main__":
 
         args = " ".join(args)
 
-#        print(f)
-#        print ( repr(args) )
-#        print (n)
+        # print(f)
+        # print ( repr(args) )
+        # print (n)
+
 
         if  os.path.isfile(f):
 
@@ -1485,10 +1519,11 @@ if __name__ == "__main__":
                     result =  subprocess.check_call( [ f, args ] , universal_newlines=True, stderr=subprocess.STDOUT, shell=False )
 
                     n -= 1
-
+                    
+                    
             except subprocess.CalledProcessError as cpe:
 
-                eprint( str(cpe) )
+                eprint( "eprint", str(cpe) )
 
 
         else:
@@ -1500,22 +1535,25 @@ if __name__ == "__main__":
                 shell_command = [ f,  args ]
 
                 shell_command =  f + " " +  args
-
+                
+                
                 while n > 0 :
 
                     event = Popen(shell_command, shell=True, stdin=PIPE, stdout=PIPE, stderr=STDOUT)
+
 
                     n -= 1
 
                     output = event.communicate()
 
-
                     print( output[0].decode('ascii') )
-#                print("output " , repr(output) )
+                    
+                    #print("output " , repr(output) , file=sys.stderr)
 
             except subprocess.CalledProcessError as cpe:
-                eprint(  str(cpe) )
+                eprint( "eprint",  str(cpe) )
 
+            
     # else:
     #     for f in a[1:]:
     #         if os.path.isfile(f):
@@ -1523,7 +1561,7 @@ if __name__ == "__main__":
 
 
 
-
+    
 
 
     #elif PUT YOUR KEYWORD HERE
@@ -1539,24 +1577,26 @@ if __name__ == "__main__":
 
 
         if not first:
-            cmd = " ".join(sys.argv[1:])
-#            print( ("cmd:  " + cmd) )
+ #           cmd = "add"
+            args = " ".join(sys.argv[1:])
+            print( ("not first cmd:  " + cmd))
         else:
             cmd = first
 #            print( ("cmd:  " + cmd) )
-            args =  sys.argv
+            args =  sys.argv[1:]
             
             
     if cmd:
+  #      print("cmd: " , cmd)
+  #      print("args:", args)
         try:
-            for cmd in args:
-                res  =  n_eval(cmd)
+            for arg in args:
+                res  =  n_eval(arg)
 
-                if isinstance( res, bool ):  # actual boolean type
-                    print(repr(res))
-                elif res:                    # not None
-                    printf("%s\n" , res)
-
+            if isinstance( res, bool ):  # actual boolean type
+                print(repr(res))
+            elif res:                    # not None
+                printf("%s\n" , res)
         except SyntaxError:
             sys.stderr.write("nv: syntax error: " + cmd )
 
@@ -1565,7 +1605,7 @@ if __name__ == "__main__":
 
 else:
     pass
-
+    
 
 
 # "int( sin( sqrt(1/2))**2 + cos(sqrt(1/2))**2 )"
