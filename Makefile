@@ -2,7 +2,7 @@
 
 # AUTHOR:  Chris Reid <spikeysnack@gmail.com> #
 # LICENSE: Free for all purposes              #
-# COPYRIGHT: 2020 - Chris Reid                #
+# COPYRIGHT: 2023   Chris Reid                #
 
 
 # modification allowed 

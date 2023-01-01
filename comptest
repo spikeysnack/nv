@@ -1,0 +1,16 @@
+a="dog"
+b="a man's best friend is his dog."
+
+./nv comp "$a >< $b"
+
+./nv comp "$b >< $a"
+
+./nv comp "$b <> $a"
+
+./nv comp "$a > $b"
+
+./nv comp "$a < $b"
+
+
+./nv comp "$b == $b"
+

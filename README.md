@@ -9,7 +9,7 @@
 version: 1.8
 -------
 
-revision date: 30 Oct 2020
+revision date: 1 Jan 2023
 -------------
 
 Master URL: <https://github.com/spikeysnack/nv>
@@ -197,7 +197,7 @@ Author:
 
 Copyright:
 ----------
-			@2019-2020 free for non-commercial use.
+			@2019-2023 free for non-commercial use.
 
 
 ![nv](nv.png)
