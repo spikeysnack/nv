@@ -6,10 +6,10 @@
 
 **Python shell utility for numerical processing in bash**
 
-version: 1.8
+version: 1.9
 -------
 
-revision date: 1 Jan 2023
+revision date: 9 Sep 2023
 -------------
 
 Master URL: <https://github.com/spikeysnack/nv>
