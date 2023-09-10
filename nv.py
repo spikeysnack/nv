@@ -69,7 +69,7 @@ __maintainer__  = ("Chris Reid")
 
 __modification_date__ = ("01 Jan 2023")
 
-__version__     = ("1.9")
+__version__     = ("1.9.1")
 
 __status__      = ("working")
 
@@ -201,7 +201,7 @@ def reinstall():
                     print("nv is up to date.")
                     return
                 else:
-                    print("updating file")
+                    print("updating file to version " + __version__ )
 
                 if os.path.islink(destlnk):
                     os.unlink(destlnk)
@@ -504,7 +504,8 @@ def str_compare( a ):
     '~'  unique set of letters of both strings
 
     """
- #   eprint("DEBUG a: " , a)
+
+    eprint("DEBUG a: " , a)
         
     for op in ( ' <=> ', ' >< ', ' <> ', ' != ', ' == ' , ' <= ', ' >= ', ' > ', ' < ', ' @ ' , ' # ', ' ~ '  ):
         
