@@ -67,7 +67,7 @@ __license__     = ( """Free for all non-commercial purposes.
 
 __maintainer__  = ("Chris Reid")
 
-__modification_date__ = ("01 Jan 2023")
+__modification_date__ = ("09 Sep 2023")
 
 __version__     = ("1.9.1")
 
